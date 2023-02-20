@@ -16,6 +16,10 @@ class Group(models.Model):
 
     class Meta:
         verbose_name_plural = 'Группы'
+        indexes = [
+            models.Index(fields=['title', 'slug', 'description']),
+            models.Index(fields=['slug'], name='slug_idx'),
+        ]
 
 
 class Post(models.Model):
@@ -95,5 +99,14 @@ class Follow(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following'
+        related_name='following',
+        verbose_name='Имя автора',
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'],
+                                    name='unique_follow')
+        ]
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'

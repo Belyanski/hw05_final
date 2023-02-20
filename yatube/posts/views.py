@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
 
-from .models import Group, Post, Comment, Follow, User
+from .models import Group, Post, Follow, User
 from .forms import PostForm, CommentForm
 
 TEN_POSTS = 10
@@ -44,7 +44,7 @@ def profile(request, username):
     posts = author.posts.select_related('group')
     page_obj = pagination(request, posts)
     count_posts = author.posts.count()
-    if request.user.is_authenticated and request.user != author:
+    if request.user.is_authenticated:
         following = Follow.objects.select_related(
             'user', 'author'
         ).exists()
@@ -62,7 +62,7 @@ def profile(request, username):
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST or None)
-    comments = Comment.objects.filter(post_id=post.id)
+    comments = post.comments.all().select_related('author')
     author = post.author
     count_posts = author.posts.count()
     context = {
@@ -147,6 +147,5 @@ def profile_follow(request, username):
 def profile_unfollow(request, username):
     follower = Follow.objects.filter(
         user=request.user, author__username=username)
-    if follower.exists():
-        follower.delete()
+    follower.delete()
     return redirect('posts:profile', username=username)
