@@ -17,7 +17,6 @@ class Group(models.Model):
     class Meta:
         verbose_name_plural = 'Группы'
         indexes = [
-            models.Index(fields=['title', 'slug', 'description']),
             models.Index(fields=['slug'], name='slug_idx'),
         ]
 
