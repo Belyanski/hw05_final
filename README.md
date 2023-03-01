@@ -6,16 +6,22 @@
 ```sh
 Python
 ```
+```sh
 Django
 ```
+```sh
 SQLite
 ```
+```sh
 HTML
 ```
+```sh
 CSS
 ```
+```sh
 Bootstrap
 ```
+```sh
 Unittest
 ```
 ### Запуск проекта в dev-режиме
